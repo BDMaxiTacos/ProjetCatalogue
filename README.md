@@ -6,8 +6,7 @@ Gestion du projet: [Trello](https://trello.com/b/xa5PZcm3/symfony-project)
 
 ##Vérifier que ces extensions php sont installées
 
-Avec `php -m` (je ne connais pas précisément lesquelles sont nécessaires, c'est celles qui sont installées sur mon ordinateur)
-
+Avec `php -m` 
 - calendar 
 - Core 
 - ctype 
