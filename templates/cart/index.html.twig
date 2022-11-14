@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <a class="btn btn-light" href="{{ path('articles', { idshop: cart.shop.id }) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-bottom: 5px"
+                 class="d-none d-lg-inline-flex bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            Retour à la liste des articles
+        </a>
+        <h1>Panier {{ app.user.username }}!</h1>
+        <div class="">
+            {% if length_article > 0 %}
+                <table class="table">
+                    <thead>
+                        <td>Titre</td>
+                        <td>Prix</td>
+                        <td>Quantité</td>
+                        <td>Suppression</td>
+                    </thead>
+                    <tbody>
+                    {% for article in articles %}
+                        <tr>
+                            <td>{{ article.titre }}</td>
+                            <td>{{ article.price }}</td>
+                            <td>
+                                {% if mode is defined  and mode is same as('edit')%}
+                                    <form method="POST" action="{{ path('cart.edit', { cart: cart.id, id: article.id }) }}">
+                                        <label for="quantity{{ article.id }}">
+                                            Quantité choisie:
+                                            <input type="number" value="{{ quantities[article.id] }}" name="quantity{{ article.id }}" required >
+                                        </label>
+                                        <button class="btn btn-danger">OK</button>
+                                    </form>
+                                {% else %}
+                                    {{ quantities[article.id] }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ path('cart.article.delete', {id: article.id, order: cart.id}) }}"
+                                      onsubmit="return confirm('Êtes-vous sûr?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <a class="btn btn-light col-3" href="{{ path('cart.validate', {cart: cart.id}) }}">
+                        Valider mon panier
+                    </a>
+                    <a class="btn btn-success offset-1 col-3" href="{{ path('cart.index', {mode: 'edit'}) }}">
+                        Editer mon panier
+                    </a>
+                </div>
+            {% else %}
+                Votre panier est vide
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

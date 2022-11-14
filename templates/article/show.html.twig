@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article "{{ article.titre }}"{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <a class="btn btn-light" href="{{ path('articles', { idshop: shop.id }) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-bottom: 5px"
+                 class="d-none d-lg-inline-flex bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            Retour à la liste des articles
+        </a>
+        <h1>{{ article.titre }}</h1>
+        <table class="table">
+            <thead>
+                <td>Prix</td>
+                <td>Quantité disponible</td>
+                <td>Ajout</td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ article.price }} €</td>
+                    <td>{{ article.stockAvailable }} </td>
+                    {% if app.user and article.stockAvailable > 0 %}
+                        <td>
+                            <form method="POST" action="{{ path('article.cart.add', {id: article.id, idshop: shop.id}) }}">
+                                <label for="quantity">
+                                    Quantité choisie:
+                                    <input type="number" name="quantity" required >
+                                </label>
+                                <button class="btn btn-danger">Ajouter</button>
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

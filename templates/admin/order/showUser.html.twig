@@ -1,0 +1,33 @@
+<!-- Modal User -->
+<div class="modal" id="modalInfoUser" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Informations sur {{ order.user.username }}</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <td>Email</td>
+                        <td>Role</td>
+                    </thead>
+                    <tbody>
+                        <td>
+                            {{ order.user.email }}
+                        </td>
+                        <td>
+                            {% if 'ROLE_ADMIN' in order.user.roles %}
+                                Admin
+                            {% else %}
+                                Client
+                            {% endif %}
+                        </td>
+                    </tbody>
+                </table>
+                <div class="form-group col-3">
+                    <button onclick="closeModal('modalInfoUser')" type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

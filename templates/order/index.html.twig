@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <h1>Liste des commandes</h1>
+        <h2>{{ app.user.username }}</h2>
+        {% for shop in shops %}
+            <h3 style="margin-top: 50px">{{ shop.name }}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td style="width: 10%">Date de commande</td>
+                        <td style="width: 20%">Nom du magasin</td>
+                        <td style="width: 10%">Actions</td>
+                        <td style="width: 7%">État</td>
+                    </tr>
+                </thead>
+                <tbody style="align-items: center">
+                    {% for order in orders %}
+                        {% if shop.id == order.shop.id %}
+                            {% if(not(order.state.id is same as(1))) %}
+                                <tr>
+                                    <td>{{ order.dateOrdered|date('d-m-Y') }}</td>
+                                    <td>{{ order.shop.name }}</td>
+                                    <td style="padding: 5px 20px">
+                                        <a class="btn btn-primary" href="{{ path('order.show', {id: order.id}) }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-bottom: 5px"
+                                                 class="d-none d-lg-inline-flex bi bi-eye-fill" viewBox="0 0 16 16">
+                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                            Détails de la commande
+                                        </a>
+                                    </td>
+                                    <td>
+                                    {% if(order.state.id is same as(2)) %}
+                                            <a href="{{ path('order.cancel', {id: order.id}) }}">Annuler la commande</a>
+                                    {% else %}
+                                        <div>
+                                            {{ order.state.description }}
+                                        </div>
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        let elements = document.getElementsByClassName('mb-3');
+        if(elements.length > 0){
+            let i;
+            for (i = 0; i < elements.length; i++){
+                elements[i].classList.remove('mb-3');
+            }
+        }
+    </script>
+{% endblock %}

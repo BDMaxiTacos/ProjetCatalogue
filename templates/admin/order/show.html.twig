@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande du {{ order.dateOrdered|date("d-m-Y") }}{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col-6">
+                <h1>Commande de {{ order.user.username }}</h1>
+                <h2>Date : {{ order.dateOrdered|date("d-m-Y") }}</h2>
+            </div>
+            <div class="col-4 offset-2 d-flex" style="align-items: center; flex-direction: column">
+                <label>Créneau choisi :</label>
+                {% if order.state.id is same as(3) or order.state.id is same as(4) %}
+                    {% if order.state.id is same as(3) %}
+                        Attente de sélection du créneau
+                    {% else %}
+                        {% if order.dateRetrieve is not null %}
+                            {{ order.dateRetrieve|date('d-m-Y H:i') }}
+                        {% else %}
+                            Pas de créneau sélectionné
+                        {% endif %}
+                    {% endif %}
+                {% elseif (order.state.id is same as(2)) %}
+                    En attente de préparation
+                {% endif %}
+                {# change order state #}
+                {% if order.state.description is same as('Commande en cours') %}
+                    <a href="{{ path('admin.order.ready', {id: order.id, state: 'Commande prête'}) }}">
+                        <button class="btn btn-primary">Prêt</button>
+                    </a>
+                {% elseif order.state.description is same as('Commande prête') %}
+                    {% if order.dateRetrieve is not null %}
+                        <a href="{{ path('admin.order.taken', {id: order.id, state: 'Commande récupérée'}) }}">
+                            <button class="btn btn-success">Réceptionnée</button>
+                        </a>
+                    {% else %}
+                        Attente de la sélection du créneau
+                    {% endif %}
+                {% else %}
+                    <a>
+                        <button class="btn btn-disabled" disabled>Commande récupérée</button>
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td style="width: 35%">Titre</td>
+                <td style="width: 15%">Prix</td>
+                <td style="width: 15%">Quantité</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.titre }}</td>
+                    <td>{{ article.price }}</td>
+                    <td>{{ quantities[article.id] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier magasin{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <h1>Editer un magasion</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.email) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

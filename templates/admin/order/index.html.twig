@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if statut is not null %}
+        Administration commandes de {{ statut.description }}
+    {% else %}
+        Administration commandes
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <button class="btn btn-primary col-2 offset-10" onclick="openModal('modalSearch')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="d-none d-lg-inline-flex bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                Rechercher
+            </button>
+        </div>
+        <h1>
+            {% if statut is not null %}
+                Liste des commandes de {{ statut.description }}
+            {% else %}
+                Liste de toutes les commandes
+            {% endif %}
+        </h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td style="width: 35%">Date de commande</td>
+                    <td style="width: 20%">Créneau de retrait</td>
+                    <td style="width: 45%">Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        {{ order.dateOrdered|date('d-m-Y') }}
+                        <button class="col-4 offset-1 btn btn-primary" onclick="openModal('modalInfoUser')" style="font-size: 13px">
+                            Voir l'utilisateur
+                        </button>
+                        {% include 'admin/order/showUser.html.twig' %}
+                    </td>
+                    <td>
+                        {% if order.state.id is same as(3) or order.state.id is same as(4) %}
+                            {% if order.state.id is same as(3) and order.dateRetrieve is null %}
+                                Attente de sélection du créneau
+                            {% else %}
+                                {% if order.dateRetrieve is not null %}
+                                    {{ order.dateRetrieve|date('d-m-Y H:i') }}
+                                {% else %}
+                                    Pas de créneau sélectionné
+                                {% endif %}
+                            {% endif %}
+                        {% elseif (order.state.id is same as(2)) %}
+                            En attente de préparation
+                        {% endif %}
+                    </td>
+                    <td class="row">
+                        <div class="col-6">
+                            {% if order.state.description is same as('Commande en cours') %}
+                                <a href="{{ path('admin.order.ready', {id: order.id, state: 'Commande prête'}) }}">
+                                    <button class="btn btn-primary">Prêt</button>
+                                </a>
+                            {% elseif order.state.description is same as('Commande prête') %}
+                                {% if order.dateRetrieve is not null %}
+                                    <a href="{{ path('admin.order.taken', {id: order.id, state: 'Commande récupérée'}) }}">
+                                        <button class="btn btn-success">Réceptionnée</button>
+                                    </a>
+                                {% else %}
+                                    Attente de la sélection du créneau
+                                {% endif %}
+                            {% else %}
+                                <a>
+                                    <button class="btn btn-disabled" disabled>Commande récupérée</button>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ path('admin.order.show', { id: order.id }) }}" class="btn btn-secondary">
+                                Détails
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modalSearch" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rechercher</h5>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form, { attr: { class: 'row' } }) }}
+                    <div class="form-group col-12">
+                        {{ form_row(form.state) }}
+                    </div>
+                    <div class="form-group col-3">
+                        {{ form_row(form.submit, { label: 'Rechercher' }) }}
+                    </div>
+                    <div class="form-group col-3">
+                        <button onclick="closeModal('modalSearch')" type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

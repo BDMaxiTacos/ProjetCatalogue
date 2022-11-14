@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-nous!{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+    <a class="btn btn-light" href="{{ path('shops') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-bottom: 5px"
+             class="d-none d-lg-inline-flex bi bi-chevron-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+        </svg>
+        Retour à la liste des magasins
+    </a>
+    <h1>Contact {{ name_shop }}</h1>
+
+        {{ form_start(form_contact) }}
+            {{ form_row(form_contact.firstname) }}
+            {{ form_row(form_contact.mail) }}
+            {{ form_row(form_contact.message) }}
+        {{ form_end(form_contact) }}
+    </div>
+{% endblock %}

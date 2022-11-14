@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande du {{ order.dateOrdered|date("d-m-Y") }}{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col-6">
+                <h1>Commande du {{ order.dateOrdered|date("d-m-Y") }}</h1>
+            </div>
+            <div class="col-4 offset-2">
+                <label>Créneau choisi :</label>
+                {% if order.state.id is same as(3) or order.state.id is same as(4) %}
+                    {% if order.state.id is same as(3) %}
+                        {{ form_start(form, { 'attr': { 'class': 'row' } }) }}
+                            <input type="hidden" value="{{ order.id }}">
+                            <div class="col-10">
+                                {{ form_row(form.dateRetrieve, { 'label': false }) }}
+                            </div>
+                            <div class="col-2">
+                                {{ form_row(form.submit, {'label': 'OK'}) }}
+                            </div>
+                        {{ form_end(form) }}
+                    {% else %}
+                        {{ order.dateRetrieve|date('d-m-Y H:i') }}
+                    {% endif %}
+                {% elseif (order.state.id is same as(2)) %}
+                    En attente de préparation
+                {% endif %}
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td style="width: 35%">Titre</td>
+                <td style="width: 15%">Prix</td>
+                <td style="width: 15%">Quantité</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.titre }}</td>
+                    <td>{{ article.price }}</td>
+                    <td>{{ quantities[article.id] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if(order.state.id is same as(2)) %}
+            <a href="{{ path('order.cancel', {id: order.id}) }}">Annuler mon panier</a>
+        {% endif %}
+    </div>
+{% endblock %}
