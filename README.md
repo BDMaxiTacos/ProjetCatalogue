@@ -1,7 +1,3 @@
-olivier@gallas.me
-
-Gestion du projet: [Trello](https://trello.com/b/xa5PZcm3/symfony-project)
-
 #Installation du projet
 
 ##Vérifier que ces extensions php sont installées
