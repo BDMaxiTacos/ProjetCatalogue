@@ -1,6 +1,6 @@
 #Installation du projet
 
-##Url du projet
+##Url du répertoire de base du projet
 
 [GitLab](https://gitlab.com/TristanJ21/projectproductssymfony)
 
