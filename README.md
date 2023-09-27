@@ -1,5 +1,11 @@
 #Installation du projet
 
+##Url du projet
+
+[GitLab](https://gitlab.com/TristanJ21/projectproductssymfony)
+
+Ce projet a été créé pour ma formation sur Symfony
+
 ##Vérifier que ces extensions php sont installées
 
 Avec `php -m` 
